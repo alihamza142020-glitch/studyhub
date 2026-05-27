@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notes — StudyHub</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>" />
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="logo">Study<span>Hub</span></a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="notes.html" class="active">Notes</a></li>
+      <li><a href="quiz.html">Quiz</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger">&#9776;</button>
+  </nav>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>Study Notes</h1>
+      <p>All subjects, all topics — concise and exam-ready</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+
+      <!-- FILTER + SEARCH -->
+      <div class="filter-bar">
+        <div class="filter-tabs" id="filter-tabs">
+          <button class="filter-btn active" data-subject="all">All</button>
+          <button class="filter-btn" data-subject="ds">🌲 Data Structures</button>
+          <button class="filter-btn" data-subject="oop">🧩 OOP</button>
+          <button class="filter-btn" data-subject="os">💻 OS</button>
+          <button class="filter-btn" data-subject="db">🗄️ Databases</button>
+          <button class="filter-btn" data-subject="cn">🌐 Networks</button>
+          <button class="filter-btn" data-subject="algo">⚙️ Algorithms</button>
+        </div>
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" placeholder="Search notes..." oninput="renderNotes()" />
+        </div>
+      </div>
+
+      <!-- SORT + COUNT -->
+      <div class="notes-toolbar">
+        <span id="notes-count" class="notes-count"></span>
+        <select id="sort-select" onchange="renderNotes()">
+          <option value="default">Default order</option>
+          <option value="az">A → Z</option>
+          <option value="za">Z → A</option>
+        </select>
+      </div>
+
+      <div class="notes-grid" id="notes-grid"></div>
+
+      <!-- NOTE MODAL -->
+      <div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+        <div class="modal-box" onclick="event.stopPropagation()">
+          <button class="modal-close" onclick="closeModal()">✕</button>
+          <span class="note-tag" id="modal-tag"></span>
+          <h2 id="modal-title"></h2>
+          <div id="modal-body"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <div class="footer-logo">Study<span>Hub</span></div>
+        <p class="footer-desc">A CS study resource for Air University students.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="notes.html">Notes</a></li>
+          <li><a href="quiz.html">Quiz</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 StudyHub · Air University AICT Project</p>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    let activeSubject = 'all';
+
+    // Read URL param
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('subject')) {
+      activeSubject = params.get('subject');
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.subject === activeSubject);
+      });
+    }
+
+    // Filter button clicks
+    document.getElementById('filter-tabs').addEventListener('click', e => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeSubject = btn.dataset.subject;
+      renderNotes();
+    });
+
+    function renderNotes() {
+      const q = document.getElementById('search-input').value.toLowerCase();
+      const sort = document.getElementById('sort-select').value;
+      let list = [...notes];
+      if (activeSubject !== 'all') list = list.filter(n => n.subject === activeSubject);
+      if (q) list = list.filter(n => n.title.toLowerCase().includes(q) || n.body.toLowerCase().includes(q) || n.subject.toLowerCase().includes(q));
+      if (sort === 'az') list.sort((a, b) => a.title.localeCompare(b.title));
+      if (sort === 'za') list.sort((a, b) => b.title.localeCompare(a.title));
+
+      const grid = document.getElementById('notes-grid');
+      const count = document.getElementById('notes-count');
+      count.textContent = `${list.length} note${list.length !== 1 ? 's' : ''} found`;
+      grid.innerHTML = list.length ? list.map(n => renderNoteCard(n, true)).join('') : '<p class="no-results">No notes found. Try a different search.</p>';
+    }
+
+    // Modal
+    function openNote(id) {
+      const note = notes.find(n => n.id === id);
+      if (!note) return;
+      document.getElementById('modal-tag').textContent = subjectLabels[note.subject];
+      document.getElementById('modal-tag').className = 'note-tag tag-' + note.subject;
+      document.getElementById('modal-title').textContent = note.title;
+      document.getElementById('modal-body').innerHTML = `
+        <p class="modal-desc">${note.body}</p>
+        ${note.points ? `<ul class="modal-points">${note.points.map(p => `<li>${p}</li>`).join('')}</ul>` : ''}
+        ${note.code ? `<pre class="code-block"><code>${note.code}</code></pre>` : ''}
+      `;
+      document.getElementById('modal-overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modal-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    renderNotes();
+  </script>
+</body>
+</html>

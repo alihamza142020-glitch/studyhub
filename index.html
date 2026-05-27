@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudyHub — CS Notes & Resources</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="logo">Study<span>Hub</span></a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="notes.html">Notes</a></li>
+      <li><a href="quiz.html">Quiz</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">&#9776;</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <span class="hero-label">Air University · CS Department</span>
+        <h1>Your CS Notes,<br><span>All in One Place.</span></h1>
+        <p>Study smarter with organized notes, practice quizzes, and quick-reference resources for every core CS subject.</p>
+        <div class="hero-btns">
+          <a href="notes.html" class="btn btn-primary">Browse Notes →</a>
+          <a href="quiz.html" class="btn btn-outline">Take a Quiz</a>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <span class="stat-num" id="count-notes">0</span>
+          <span class="stat-lbl">Study Notes</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="count-subjects">0</span>
+          <span class="stat-lbl">Subjects</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="count-questions">0</span>
+          <span class="stat-lbl">Quiz Questions</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUBJECTS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="section-tag">Browse by Subject</p>
+          <h2 class="section-title">Pick Your Topic</h2>
+        </div>
+      </div>
+      <div class="subjects-grid">
+        <a href="notes.html?subject=ds" class="subject-card">
+          <span class="subject-icon">🌲</span>
+          <h3>Data Structures</h3>
+          <p>Arrays · Trees · Graphs · Stacks</p>
+        </a>
+        <a href="notes.html?subject=oop" class="subject-card">
+          <span class="subject-icon">🧩</span>
+          <h3>OOP Concepts</h3>
+          <p>Classes · Inheritance · Polymorphism</p>
+        </a>
+        <a href="notes.html?subject=os" class="subject-card">
+          <span class="subject-icon">💻</span>
+          <h3>Operating Systems</h3>
+          <p>Processes · Memory · Scheduling</p>
+        </a>
+        <a href="notes.html?subject=db" class="subject-card">
+          <span class="subject-icon">🗄️</span>
+          <h3>Databases</h3>
+          <p>SQL · Normalization · ERDs</p>
+        </a>
+        <a href="notes.html?subject=cn" class="subject-card">
+          <span class="subject-icon">🌐</span>
+          <h3>Computer Networks</h3>
+          <p>OSI Model · TCP/IP · Protocols</p>
+        </a>
+        <a href="notes.html?subject=algo" class="subject-card">
+          <span class="subject-icon">⚙️</span>
+          <h3>Algorithms</h3>
+          <p>Sorting · Searching · Complexity</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECENT NOTES -->
+  <section class="section bg-white">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="section-tag">Latest Added</p>
+          <h2 class="section-title">Recent Notes</h2>
+        </div>
+        <a href="notes.html" class="btn btn-dark">View All →</a>
+      </div>
+      <div class="notes-grid" id="recent-notes"></div>
+    </div>
+  </section>
+
+  <!-- TIP OF THE DAY -->
+  <section class="tip-banner">
+    <div class="container tip-inner">
+      <div>
+        <p class="section-tag" style="color:#fbbf24;">Daily Tip</p>
+        <h2 style="font-size:1.4rem; font-weight:700; margin-bottom:0.5rem;">💡 <span id="tip-text"></span></h2>
+      </div>
+      <button class="btn btn-tip" onclick="nextTip()">New Tip ✨</button>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="section-tag">How to Use</p>
+          <h2 class="section-title">Simple & Effective</h2>
+        </div>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <h3>Pick a Subject</h3>
+          <p>Browse subjects from Data Structures to Computer Networks. Find exactly what you need.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <h3>Read the Notes</h3>
+          <p>Concise, exam-focused notes written in simple language. No fluff, just what matters.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <h3>Test Yourself</h3>
+          <p>Take subject-specific quizzes to see how much you've retained before the exam.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <div class="footer-logo">Study<span>Hub</span></div>
+        <p class="footer-desc">A CS study resource made by a student, for students at Air University Islamabad.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="notes.html">Notes</a></li>
+          <li><a href="quiz.html">Quiz</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Subjects</h4>
+        <ul>
+          <li><a href="notes.html?subject=ds">Data Structures</a></li>
+          <li><a href="notes.html?subject=oop">OOP</a></li>
+          <li><a href="notes.html?subject=os">Operating Systems</a></li>
+          <li><a href="notes.html?subject=db">Databases</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="quiz.html">Practice Quiz</a></li>
+          <li><a href="contact.html">Suggest a Topic</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 StudyHub · Air University AICT Project · Instructor: Tariq Mahmood</p>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Animate counters
+    function animateCounter(id, target) {
+      let count = 0;
+      const step = Math.ceil(target / 40);
+      const el = document.getElementById(id);
+      const timer = setInterval(() => {
+        count = Math.min(count + step, target);
+        el.textContent = count + '+';
+        if (count >= target) clearInterval(timer);
+      }, 40);
+    }
+    animateCounter('count-notes', notes.length);
+    animateCounter('count-subjects', 6);
+    animateCounter('count-questions', quizQuestions.length);
+
+    // Render 4 most recent notes
+    const recent = notes.slice(0, 4);
+    document.getElementById('recent-notes').innerHTML = recent.map(renderNoteCard).join('');
+
+    // Tips
+    const tips = [
+      "Use the Pomodoro technique — study for 25 minutes, then take a 5-minute break.",
+      "Teach a concept to yourself out loud. If you can't explain it simply, you don't understand it yet.",
+      "Review your notes within 24 hours of a lecture. Retention drops by 70% after a day.",
+      "For exams, practice past papers more than re-reading notes.",
+      "Write code by hand at least once. It forces real understanding.",
+      "Always think about time AND space complexity when studying algorithms.",
+      "Make a one-page cheat sheet for each subject — summarizing forces recall.",
+    ];
+    let tipIdx = 0;
+    function nextTip() {
+      tipIdx = (tipIdx + 1) % tips.length;
+      document.getElementById('tip-text').textContent = tips[tipIdx];
+    }
+    document.getElementById('tip-text').textContent = tips[0];
+  </script>
+</body>
+</html>

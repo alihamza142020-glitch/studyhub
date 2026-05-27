@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz — StudyHub</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>" />
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="logo">Study<span>Hub</span></a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="notes.html">Notes</a></li>
+      <li><a href="quiz.html" class="active">Quiz</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger">&#9776;</button>
+  </nav>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>Practice Quiz</h1>
+      <p>Test your knowledge across all CS subjects</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container quiz-container">
+
+      <!-- SETUP SCREEN -->
+      <div id="setup-screen">
+        <h2 class="quiz-setup-title">Choose Your Quiz</h2>
+        <p class="quiz-setup-sub">Select a subject and number of questions to get started.</p>
+        <div class="setup-grid">
+          <div class="setup-card">
+            <label class="setup-label">Subject</label>
+            <select id="quiz-subject">
+              <option value="all">All Subjects (Mixed)</option>
+              <option value="ds">Data Structures</option>
+              <option value="oop">OOP</option>
+              <option value="os">Operating Systems</option>
+              <option value="db">Databases</option>
+              <option value="cn">Computer Networks</option>
+              <option value="algo">Algorithms</option>
+            </select>
+          </div>
+          <div class="setup-card">
+            <label class="setup-label">Number of Questions</label>
+            <select id="quiz-count">
+              <option value="5">5 questions</option>
+              <option value="10" selected>10 questions</option>
+              <option value="15">15 questions</option>
+              <option value="20">All questions</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="startQuiz()" style="margin-top:1.5rem;">Start Quiz →</button>
+      </div>
+
+      <!-- QUIZ SCREEN -->
+      <div id="quiz-screen" style="display:none;">
+        <div class="quiz-progress-bar">
+          <div class="quiz-progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="quiz-meta">
+          <span id="quiz-meta-subject"></span>
+          <span id="quiz-meta-progress"></span>
+        </div>
+        <div class="quiz-card">
+          <p class="quiz-question" id="quiz-question"></p>
+          <div class="quiz-options" id="quiz-options"></div>
+          <div class="quiz-feedback" id="quiz-feedback" style="display:none;"></div>
+        </div>
+        <div class="quiz-nav">
+          <button class="btn btn-outline-dark" onclick="quitQuiz()">✕ Quit</button>
+          <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()" style="display:none;">Next →</button>
+        </div>
+      </div>
+
+      <!-- RESULT SCREEN -->
+      <div id="result-screen" style="display:none;">
+        <div class="result-card">
+          <div class="result-emoji" id="result-emoji"></div>
+          <h2 class="result-title" id="result-title"></h2>
+          <p class="result-sub" id="result-sub"></p>
+          <div class="result-score" id="result-score"></div>
+          <div class="result-breakdown" id="result-breakdown"></div>
+          <div class="result-btns">
+            <button class="btn btn-primary" onclick="restartQuiz()">Try Again</button>
+            <a href="notes.html" class="btn btn-outline-dark">Review Notes</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <div class="footer-logo">Study<span>Hub</span></div>
+        <p class="footer-desc">A CS study resource for Air University students.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="notes.html">Notes</a></li>
+          <li><a href="quiz.html">Quiz</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 StudyHub · Air University AICT Project</p>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    let quizList = [];
+    let currentIdx = 0;
+    let score = 0;
+    let answered = false;
+    let wrongAnswers = [];
+
+    function startQuiz() {
+      const subject = document.getElementById('quiz-subject').value;
+      const count = parseInt(document.getElementById('quiz-count').value);
+
+      let pool = subject === 'all' ? [...quizQuestions] : quizQuestions.filter(q => q.subject === subject);
+      // Shuffle
+      pool.sort(() => Math.random() - 0.5);
+      quizList = pool.slice(0, Math.min(count, pool.length));
+      currentIdx = 0;
+      score = 0;
+      wrongAnswers = [];
+
+      if (quizList.length === 0) {
+        alert('No questions found for this subject. Try another.');
+        return;
+      }
+
+      document.getElementById('setup-screen').style.display = 'none';
+      document.getElementById('result-screen').style.display = 'none';
+      document.getElementById('quiz-screen').style.display = 'block';
+      document.getElementById('quiz-meta-subject').textContent = subject === 'all' ? 'Mixed' : subjectLabels[subject];
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      answered = false;
+      const q = quizList[currentIdx];
+      const total = quizList.length;
+
+      document.getElementById('progress-fill').style.width = ((currentIdx / total) * 100) + '%';
+      document.getElementById('quiz-meta-progress').textContent = `Question ${currentIdx + 1} of ${total}`;
+      document.getElementById('quiz-question').textContent = `Q${currentIdx + 1}. ${q.question}`;
+      document.getElementById('quiz-feedback').style.display = 'none';
+      document.getElementById('next-btn').style.display = 'none';
+
+      const opts = document.getElementById('quiz-options');
+      opts.innerHTML = q.options.map((opt, i) => `
+        <button class="quiz-opt" onclick="selectAnswer(${i})">${opt}</button>
+      `).join('');
+    }
+
+    function selectAnswer(i) {
+      if (answered) return;
+      answered = true;
+      const q = quizList[currentIdx];
+      const opts = document.querySelectorAll('.quiz-opt');
+      opts.forEach(o => o.disabled = true);
+
+      const fb = document.getElementById('quiz-feedback');
+      fb.style.display = 'block';
+
+      if (i === q.answer) {
+        score++;
+        opts[i].classList.add('correct');
+        fb.className = 'quiz-feedback correct';
+        fb.textContent = '✓ Correct!';
+      } else {
+        opts[i].classList.add('wrong');
+        opts[q.answer].classList.add('correct');
+        fb.className = 'quiz-feedback wrong';
+        fb.textContent = `✗ Wrong. Correct answer: ${q.options[q.answer]}`;
+        wrongAnswers.push(q);
+      }
+
+      document.getElementById('next-btn').style.display = 'inline-flex';
+    }
+
+    function nextQuestion() {
+      currentIdx++;
+      if (currentIdx >= quizList.length) {
+        showResult();
+      } else {
+        loadQuestion();
+      }
+    }
+
+    function showResult() {
+      document.getElementById('quiz-screen').style.display = 'none';
+      document.getElementById('result-screen').style.display = 'block';
+      document.getElementById('progress-fill').style.width = '100%';
+
+      const pct = Math.round((score / quizList.length) * 100);
+      let emoji = '😔', title = 'Keep Practicing!', sub = 'Review the notes and try again.';
+      if (pct >= 90) { emoji = '🎉'; title = 'Excellent!'; sub = 'Outstanding performance!'; }
+      else if (pct >= 70) { emoji = '😊'; title = 'Good Job!'; sub = 'A bit more practice and you\'ll ace it.'; }
+      else if (pct >= 50) { emoji = '🙂'; title = 'Not Bad!'; sub = 'You\'re getting there. Keep going!'; }
+
+      document.getElementById('result-emoji').textContent = emoji;
+      document.getElementById('result-title').textContent = title;
+      document.getElementById('result-sub').textContent = sub;
+      document.getElementById('result-score').innerHTML = `
+        <span class="score-big">${score}</span><span class="score-slash">/${quizList.length}</span>
+        <span class="score-pct">${pct}%</span>
+      `;
+
+      if (wrongAnswers.length > 0) {
+        document.getElementById('result-breakdown').innerHTML = `
+          <h4 class="breakdown-title">Review These Topics:</h4>
+          ${wrongAnswers.map(q => `<div class="breakdown-item">• ${q.question}</div>`).join('')}
+        `;
+      }
+    }
+
+    function quitQuiz() {
+      document.getElementById('quiz-screen').style.display = 'none';
+      document.getElementById('setup-screen').style.display = 'block';
+    }
+
+    function restartQuiz() {
+      document.getElementById('result-screen').style.display = 'none';
+      document.getElementById('setup-screen').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
