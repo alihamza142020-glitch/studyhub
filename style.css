@@ -68,7 +68,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--pri
 }
 .hero-label {
   display: inline-block;
-  background: rgba(252,191,36,0.15);
+  background: rgba(253,191,36,0.15);
   color: var(--accent);
   border: 1px solid rgba(251,191,36,0.3);
   font-size: 0.75rem;
