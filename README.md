@@ -7,7 +7,7 @@ A multi-page CS study resource website built with HTML, CSS, and JavaScript for 
 ## 🔗 Live Demo
 
 > Deploy to AwardSpace and paste your link here.  
-> Example: `https://studyhub.awardspace.com`
+> Example: `http://studyhub-cs.atwebpages.com/`
 
 ---
 
