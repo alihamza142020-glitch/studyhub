@@ -107,7 +107,8 @@ docs: add README with project overview
 
 ## 👤 Author
 
-**[Your Name Here]**  
-Registration No: **[Your Reg No]**  
+Member 1: **Ali Hamza**  - Reg no:**2600243** 
+Member 2: **Abdullah Bin Ahmed**  - Reg no:**2600267** 
+Member 3: **Fahad Aziz**  - Reg no:**2600255** 
 Air University Islamabad — Department of Computer Science  
 AICT Project · Spring 2026 · Instructor: Tariq Mahmood
