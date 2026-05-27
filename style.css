@@ -51,6 +51,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--pri
 
 .hamburger { display: none; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--primary); }
 
+
 /* ─── HERO ─── */
 .hero {
   background: var(--primary);
