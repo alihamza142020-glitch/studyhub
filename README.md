@@ -84,7 +84,7 @@ cd studyhub
 
 1. Sign up free at [awardspace.com](https://www.awardspace.com)
 2. Go to **File Manager** → upload all files keeping the folder structure
-3. Your site is live instantly at `https://yourdomain.awardspace.com`
+3. Your site is live instantly at `http://studyhub-cs.atwebpages.com/`
 
 ---
 
