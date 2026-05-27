@@ -24,7 +24,7 @@ function renderNoteCard(note, clickable = false) {
     <div class="note-card" ${onclick} style="${clickable ? 'cursor:pointer;' : ''}">
       <span class="note-tag tag-${note.subject}">${label}</span>
       <h3 class="note-title">${note.title}</h3>
-      <p class="note-summary">${note.summary}</p>
+      <p  class="note-summary">${note.summary}</p>
       <div class="note-footer">
         <span class="note-read">${note.readTime} read</span>
         ${clickable ? '<span class="note-more">Read more →</span>' : ''}
